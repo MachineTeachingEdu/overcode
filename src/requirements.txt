@@ -27,7 +27,7 @@ pexpect==4.0.1
 pickleshare==0.7.2
 Pillow==3.2.0
 ptyprocess==0.5.1
-pylab==0.1.3
+#pylab==0.1.3
 pyparsing==2.1.4
 python-dateutil==2.5.3
 pytz==2016.4

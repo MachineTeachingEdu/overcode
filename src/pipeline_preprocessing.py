@@ -127,7 +127,8 @@ def tidy(source_dir, dest_dir, tested_function_name):
         dest_path = path.join(dest_dir, filename)
         try:
             tidy_one(source_path, dest_path, tested_function_name)
-        except:
+        except Exception as e:
+            print(e)
             if STOP_ON_ERROR: raise
             skipped.append(sol_id)
     return skipped

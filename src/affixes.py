@@ -8,7 +8,8 @@ null_testcase_defs = ""
 
 import_prefix = "from definitions import *\n\n"
 
-import_random = "import random\nrandom.seed(1)\nimport pylab\nimport numpy\n"
+#import_random = "import random\nrandom.seed(1)\nimport pylab\nimport numpy\n"
+import_random = "import random\nrandom.seed(1)\nimport numpy\n"
 
 testcase_defs_gustavo = r"""
 from operator import add, mul
