@@ -18,6 +18,9 @@ function getBaseDir(callback) {
     var base_dir_key = params[PARAM_BASE_DIR_KEY];
 
     d3.json('config.json', function(error, config) {
+
+        // GAMBIARRA SASSE
+        /*
         if (error) {
             // error loading the json file
             callback(error, null);
@@ -32,8 +35,11 @@ function getBaseDir(callback) {
             callback(new Error('No entry in config.json for key: ' + base_dir_key), null);
             return;
         }
+        */
 
-        var base_dir = 'overcode_data/' + config.base_dirs[base_dir_key];
+        // GAMBIARRA SASSE
+        //  var base_dir = 'overcode_data/' + config.base_dirs[base_dir_key];
+        var base_dir = ''
         callback(null, base_dir);
     });
 }

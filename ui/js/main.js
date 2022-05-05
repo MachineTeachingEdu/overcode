@@ -138,11 +138,12 @@ $(function() {
     }
     $('#filter-by-stack').hide();
   });
-
+  // GAMBIARRA SASSE
   getBaseDir(function(error, returnedBaseDir) {
     if (error) throw error;
 
     baseDir = returnedBaseDir;
+    console.log(baseDir);
     // Load the default dataset
     loadData();
   });
@@ -168,6 +169,10 @@ var loadData = function(e) {
   // load the new data
   // TODO: is there a JS equivalent of os.path.join?
   var outputPath = baseDir + '/output/';
+
+  // GAMBIARRA SASSE
+  // outputPath = '/Users/artsasse/Desktop/TCC/overcode_test/output/';
+
   d3.json(outputPath + 'phrases.json', function(error, phrases) {
     allPhrases = phrases.map(function(d) {
       d.merged = false;
