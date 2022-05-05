@@ -1,0 +1,236 @@
+[
+    {
+        "correct": true, 
+        "count": 1, 
+        "error_vector": [
+            true
+        ], 
+        "id": 1, 
+        "lineIDs": {
+            "list": [
+                1, 
+                2, 
+                3, 
+                4, 
+                6, 
+                7, 
+                8, 
+                9, 
+                12, 
+                13, 
+                14
+            ], 
+            "type": "set"
+        }, 
+        "lines": [
+            {
+                "indent": 0, 
+                "line_obj_ID": 1, 
+                "phraseID": 1
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 2, 
+                "phraseID": 2
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 3, 
+                "phraseID": 3
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 4, 
+                "phraseID": 4
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 12, 
+                "phraseID": 5
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 6, 
+                "phraseID": 6
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 7, 
+                "phraseID": 7
+            }, 
+            {
+                "indent": 8, 
+                "line_obj_ID": 8, 
+                "phraseID": 8
+            }, 
+            {
+                "indent": 8, 
+                "line_obj_ID": 9, 
+                "phraseID": 9
+            }, 
+            {
+                "indent": 8, 
+                "line_obj_ID": 13, 
+                "phraseID": 10
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 14, 
+                "phraseID": 11
+            }
+        ], 
+        "members": [
+            "aluno1"
+        ], 
+        "num_passed_tests": 1, 
+        "number": "aluno1", 
+        "phraseIDs": [
+            1, 
+            2, 
+            3, 
+            4, 
+            5, 
+            6, 
+            7, 
+            8, 
+            9, 
+            10, 
+            11
+        ], 
+        "stack_distances": {
+            "1": 1.0, 
+            "2": 0.9545454545454546
+        }, 
+        "test_input_outputs": {
+            "print breakeven()": "63\n"
+        }, 
+        "testcases": [
+            "print breakeven()"
+        ], 
+        "total_num_tests": 1, 
+        "variableIDs": [
+            1, 
+            2, 
+            3, 
+            4, 
+            5
+        ]
+    }, 
+    {
+        "correct": false, 
+        "count": 1, 
+        "error_vector": [
+            false
+        ], 
+        "id": 2, 
+        "lineIDs": {
+            "list": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5, 
+                6, 
+                7, 
+                8, 
+                9, 
+                10, 
+                11
+            ], 
+            "type": "set"
+        }, 
+        "lines": [
+            {
+                "indent": 0, 
+                "line_obj_ID": 1, 
+                "phraseID": 1
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 2, 
+                "phraseID": 2
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 3, 
+                "phraseID": 3
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 4, 
+                "phraseID": 4
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 5, 
+                "phraseID": 12
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 6, 
+                "phraseID": 6
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 7, 
+                "phraseID": 7
+            }, 
+            {
+                "indent": 8, 
+                "line_obj_ID": 8, 
+                "phraseID": 8
+            }, 
+            {
+                "indent": 8, 
+                "line_obj_ID": 9, 
+                "phraseID": 9
+            }, 
+            {
+                "indent": 8, 
+                "line_obj_ID": 10, 
+                "phraseID": 10
+            }, 
+            {
+                "indent": 4, 
+                "line_obj_ID": 11, 
+                "phraseID": 11
+            }
+        ], 
+        "members": [
+            "aluno2"
+        ], 
+        "num_passed_tests": 0, 
+        "number": "aluno2", 
+        "phraseIDs": [
+            1, 
+            2, 
+            3, 
+            4, 
+            6, 
+            7, 
+            8, 
+            9, 
+            10, 
+            11, 
+            12
+        ], 
+        "stack_distances": {
+            "1": 0.9545454545454546, 
+            "2": 1.0
+        }, 
+        "test_input_outputs": {
+            "print breakeven()": "12\n"
+        }, 
+        "testcases": [
+            "print breakeven()"
+        ], 
+        "total_num_tests": 1, 
+        "variableIDs": [
+            8, 
+            9, 
+            3, 
+            6, 
+            7
+        ]
+    }
+]

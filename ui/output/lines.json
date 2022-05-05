@@ -1,0 +1,348 @@
+[
+    {
+        "expanded_representation": "def breakeven(): ||| []", 
+        "id": 1, 
+        "line_values": [], 
+        "template": "def breakeven():"
+    }, 
+    {
+        "expanded_representation": "___=0 ||| [{'print breakeven()': ['myNaN']}]", 
+        "id": 2, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "___=0"
+    }, 
+    {
+        "expanded_representation": "___=80000 ||| [{'print breakeven()': ['myNaN']}]", 
+        "id": 3, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "___=80000"
+    }, 
+    {
+        "expanded_representation": "___=200000 ||| [{'print breakeven()': ['myNaN', 'myNaN']}]", 
+        "id": 4, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    "myNaN", 
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "___=200000"
+    }, 
+    {
+        "expanded_representation": "___=0.1 ||| [{'print breakeven()': ['myNaN']}]", 
+        "id": 5, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "___=0.1"
+    }, 
+    {
+        "expanded_representation": "___=0.015 ||| [{'print breakeven()': ['myNaN']}]", 
+        "id": 6, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "___=0.015"
+    }, 
+    {
+        "expanded_representation": "while ___<___: ||| [{'print breakeven()': [80000]}, {'print breakeven()': ['myNaN']}]", 
+        "id": 7, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    80000
+                ]
+            }, 
+            {
+                "print breakeven()": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "while ___<___:"
+    }, 
+    {
+        "expanded_representation": "___=___+___*___ ||| [{'print breakeven()': [80000]}, {'print breakeven()': [80000]}, {'print breakeven()': [80000]}, {'print breakeven()': ['myNaN']}]", 
+        "id": 8, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    80000
+                ]
+            }, 
+            {
+                "print breakeven()": [
+                    80000
+                ]
+            }, 
+            {
+                "print breakeven()": [
+                    80000
+                ]
+            }, 
+            {
+                "print breakeven()": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "___=___+___*___"
+    }, 
+    {
+        "expanded_representation": "___=___+___*___ ||| [{'print breakeven()': [200000]}, {'print breakeven()': [200000]}, {'print breakeven()': [200000]}, {'print breakeven()': ['myNaN']}]", 
+        "id": 9, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    200000
+                ]
+            }, 
+            {
+                "print breakeven()": [
+                    200000
+                ]
+            }, 
+            {
+                "print breakeven()": [
+                    200000
+                ]
+            }, 
+            {
+                "print breakeven()": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "___=___+___*___"
+    }, 
+    {
+        "expanded_representation": "___+=1 ||| [{'print breakeven()': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}]", 
+        "id": 10, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    0, 
+                    1, 
+                    2, 
+                    3, 
+                    4, 
+                    5, 
+                    6, 
+                    7, 
+                    8, 
+                    9, 
+                    10, 
+                    11, 
+                    12
+                ]
+            }
+        ], 
+        "template": "___+=1"
+    }, 
+    {
+        "expanded_representation": "return ___ ||| [{'print breakeven()': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]}]", 
+        "id": 11, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    0, 
+                    1, 
+                    2, 
+                    3, 
+                    4, 
+                    5, 
+                    6, 
+                    7, 
+                    8, 
+                    9, 
+                    10, 
+                    11
+                ]
+            }
+        ], 
+        "template": "return ___"
+    }, 
+    {
+        "expanded_representation": "___=0.03 ||| [{'print breakeven()': ['myNaN']}]", 
+        "id": 12, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "___=0.03"
+    }, 
+    {
+        "expanded_representation": "___+=1 ||| [{'print breakeven()': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63]}]", 
+        "id": 13, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    0, 
+                    1, 
+                    2, 
+                    3, 
+                    4, 
+                    5, 
+                    6, 
+                    7, 
+                    8, 
+                    9, 
+                    10, 
+                    11, 
+                    12, 
+                    13, 
+                    14, 
+                    15, 
+                    16, 
+                    17, 
+                    18, 
+                    19, 
+                    20, 
+                    21, 
+                    22, 
+                    23, 
+                    24, 
+                    25, 
+                    26, 
+                    27, 
+                    28, 
+                    29, 
+                    30, 
+                    31, 
+                    32, 
+                    33, 
+                    34, 
+                    35, 
+                    36, 
+                    37, 
+                    38, 
+                    39, 
+                    40, 
+                    41, 
+                    42, 
+                    43, 
+                    44, 
+                    45, 
+                    46, 
+                    47, 
+                    48, 
+                    49, 
+                    50, 
+                    51, 
+                    52, 
+                    53, 
+                    54, 
+                    55, 
+                    56, 
+                    57, 
+                    58, 
+                    59, 
+                    60, 
+                    61, 
+                    62, 
+                    63
+                ]
+            }
+        ], 
+        "template": "___+=1"
+    }, 
+    {
+        "expanded_representation": "return ___ ||| [{'print breakeven()': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62]}]", 
+        "id": 14, 
+        "line_values": [
+            {
+                "print breakeven()": [
+                    0, 
+                    1, 
+                    2, 
+                    3, 
+                    4, 
+                    5, 
+                    6, 
+                    7, 
+                    8, 
+                    9, 
+                    10, 
+                    11, 
+                    12, 
+                    13, 
+                    14, 
+                    15, 
+                    16, 
+                    17, 
+                    18, 
+                    19, 
+                    20, 
+                    21, 
+                    22, 
+                    23, 
+                    24, 
+                    25, 
+                    26, 
+                    27, 
+                    28, 
+                    29, 
+                    30, 
+                    31, 
+                    32, 
+                    33, 
+                    34, 
+                    35, 
+                    36, 
+                    37, 
+                    38, 
+                    39, 
+                    40, 
+                    41, 
+                    42, 
+                    43, 
+                    44, 
+                    45, 
+                    46, 
+                    47, 
+                    48, 
+                    49, 
+                    50, 
+                    51, 
+                    52, 
+                    53, 
+                    54, 
+                    55, 
+                    56, 
+                    57, 
+                    58, 
+                    59, 
+                    60, 
+                    61, 
+                    62
+                ]
+            }
+        ], 
+        "template": "return ___"
+    }
+]
