@@ -10,7 +10,7 @@ import sys
 import time
 import json
 
-t0 = time.process_time()
+t0 = time.clock()
 
 from external import pg_logger
 from pipeline_util import ensure_folder_exists
@@ -186,7 +186,7 @@ def logger_wrapper(source, output_only):
         print('stdout')
         print(list(trace.keys()))
         print(stdout)
-        print(time.process_time() - t0)
+        print(time.clock() - t0)
     except:
         print('ran into problem')
 

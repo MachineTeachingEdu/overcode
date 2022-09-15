@@ -44,7 +44,7 @@ if is_python3:
   import io as StringIO
 else:
   import io
-from . import pg_encoder
+import pg_encoder
 
 
 # TODO: not threadsafe:

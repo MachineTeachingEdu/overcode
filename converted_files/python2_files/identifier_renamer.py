@@ -62,7 +62,7 @@ def rename_identifier(src_code, id_name, new_id_name):
 
     # sort columns so that we always traverse from left to right.
     # otherwise our index adjustment procedure won't work.
-    for v in list(line_col_occurrences.values()):
+    for v in line_col_occurrences.values():
         v.sort()
 
     # Key: line number
@@ -108,11 +108,11 @@ def rename_identifier_JSON_version(src_code, id_name, new_id_name):
                     if type(elt) is dict:
                         render(elt)
                     else:
-                        assert type(elt) is str
+                        assert type(elt) is unicode
                         outbuf.append(elt)
             except KeyError:
                 v = o["value"]
-                assert type(v) is str
+                assert type(v) is unicode
 
                 # renamer:
                 if o["type"] == 'Name' and v == id_name:
@@ -142,7 +142,7 @@ i += i**i
 import sys
 if __name__ == "__main__":
     code_str = open(sys.argv[1], 'U').read() #opening with universal newline format-thingy
-    print(rename_identifier(code_str, 'lett', 'elena'))
+    print rename_identifier(code_str, 'lett', 'elena')
 
     # experimental JSON version
     #print rename_identifier_JSON_version(code_str, 'i', 'elena')

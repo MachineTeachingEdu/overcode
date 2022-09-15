@@ -1,5 +1,5 @@
 import sys
-import io
+import StringIO
 import pprint
 
 from external import (
@@ -31,7 +31,7 @@ def tidy_one(source_path, dest_path, tested_function_name):
         containing this path must exist.
     tested_function_name: string, the name of the function being tested
     """
-    tidy_up_buffer = io.StringIO()
+    tidy_up_buffer = StringIO.StringIO()
     pythonTidy.tidy_up(source_path, tidy_up_buffer)
     new_src = remove_comments.minify(tidy_up_buffer.getvalue())
 
@@ -66,11 +66,11 @@ def tidy_one(source_path, dest_path, tested_function_name):
 
             # Get rid of calls to the tested function
             if line.split('(')[0] == tested_function_name:
-                if DEBUG_PRINTS: print('removing: ', line)
+                if DEBUG_PRINTS: print 'removing: ', line
                 continue
             # Get rid of print statements with no indent
             if line.startswith('print'):
-                if DEBUG_PRINTS: print('removing: ', line)
+                if DEBUG_PRINTS: print 'removing: ', line
                 continue
 
             f.write(line+'\n')
@@ -116,7 +116,7 @@ def elena_finalizer(input_code, output_trace):
 
     def extractValues(dictOfVars,heap):
         dictToReturn = {}
-        for varname, varencoded in dictOfVars.items():
+        for varname, varencoded in dictOfVars.iteritems():
             if isinstance(varencoded, list): # varencoded is list:
                 vartype = varencoded[0]
                 varvalue = varencoded[1]
@@ -164,7 +164,7 @@ def elena_finalizer(input_code, output_trace):
         #     print "func_name:", scope['func_name']
         progTraceDict[ctr] = {}
         if 'event' in scope and scope['event']=='instruction_limit_reached':
-            print("Exceeded instruction limit")
+            print "Exceeded instruction limit"
 
         if 'event' in scope and scope['event'] == 'uncaught_exception':
             raise RuntimeError("Uncaught exception!")
@@ -221,7 +221,7 @@ def extract_var_info_from_trace(trace):
     # Assumes trace has been formatted by elena_finalizer, and the keys of
     # the trace are generated with a counter
     # TODO: can we assume this? Or do we have to sort trace.keys()?
-    for step in range(numSteps):
+    for step in xrange(numSteps):
         event = trace[step]
         # TODO: do we need (step, <line # at that step>) pairs? Or can we
         # just use the index since we're appending in order?
@@ -233,7 +233,7 @@ def extract_var_info_from_trace(trace):
         # where varVal is the value of var if var is defined at that step,
         # and 'myNaN' otherwise
         # TODO: See above - do we need the step?
-        results[var] = [(s, trace[s]['locals'].get(var, 'myNaN')) for s in range(numSteps)]
+        results[var] = [(s, trace[s]['locals'].get(var, 'myNaN')) for s in xrange(numSteps)]
     return results
 
 def extract_single_sequence(column):
@@ -259,9 +259,9 @@ def extract_single_sequence(column):
 
 def extract_sequences(testcase_to_trace):
     sequences = {}
-    for (testcase, trace) in testcase_to_trace.items():
+    for (testcase, trace) in testcase_to_trace.iteritems():
         # Extract the sequences for each variable in the trace
-        for localVarName, localVarData in trace.items():
+        for localVarName, localVarData in trace.iteritems():
             if localVarName.startswith('__'):
                 continue
             try:

@@ -57,8 +57,8 @@ testcasePath = path.join(args.basedir, 'testCase.py')
 
 if args.json:
     jsonPath = path.join(args.basedir, args.json)
-    print('jsonPath', jsonPath)
-    print('args.just',args.just)
+    print 'jsonPath', jsonPath
+    print 'args.just',args.just
 else:
     jsonPath = False
 
@@ -73,7 +73,7 @@ else:
 
 # preprocess
 if args.run_pre:
-    if args.output_only: print('only output traced')
+    if args.output_only: print 'only output traced'
     pipeline_preprocessing.preprocess_pipeline_data(
         datadir,
         testcasePath,

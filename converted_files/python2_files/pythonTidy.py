@@ -93,7 +93,7 @@ Collaborative International Dictionary of English v.0.48.
 
 '''
 
-
+from __future__ import division
 
 DEBUG = False
 PERSONAL = False
@@ -151,7 +151,7 @@ VERSION = '1.11'  # 2007 Jan 22
 import sys
 import os
 import codecs
-import io
+import StringIO
 import re
 if DEBUG:
     import token
@@ -553,7 +553,7 @@ class InputUnit(object):
         self.end = len(self.lines) - 1
         return self
 
-    def __next__(self):  # 2006 Dec 05
+    def next(self):  # 2006 Dec 05
         if self.ndx > self.end:
             raise StopIteration
         elif self.ndx == self.end:
@@ -568,7 +568,7 @@ class InputUnit(object):
 
     def readline(self):  # 2006 Dec 05
         try:
-            result = next(self)
+            result = self.next()
         except StopIteration:
             result = NULL
         return result
@@ -732,8 +732,8 @@ class Comments(dict):
         lines = tokenize.generate_tokens(INPUT.readline)
         for (token_type, token_string, start, end, line) in lines:
             if DEBUG:
-                print((token.tok_name)[token_type], token_string, start, \
-                    end, line)
+                print (token.tok_name)[token_type], token_string, start, \
+                    end, line
             (self.max_lineno, scol) = start
             (erow, ecol) = end
             if token_type in [tokenize.COMMENT, tokenize.NL]:
@@ -1142,7 +1142,7 @@ def transform(indent, lineno, node):
         result = NodeWith(indent, lineno, node.expr, node.vars, node.body)
     elif isinstance_(node, 'Yield'):
         result = NodeYield(indent, lineno, node.value)
-    elif isinstance(node, str):
+    elif isinstance(node, basestring):
         result = NodeStr(indent, lineno, node)
     elif isinstance(node, int):
         result = NodeInt(indent, lineno, node)
@@ -1261,7 +1261,7 @@ class NodeStr(Node):
 
     def set_as_str(self, str_):
         self.str = str_
-        if isinstance(self.str, str):
+        if isinstance(self.str, unicode):
             pass
         elif not RECODE_STRINGS:  # 2006 Dec 01
             pass

@@ -7,7 +7,7 @@ import os
 from os import path
 #import pickle
 try:
-   import pickle as pickle
+   import cPickle as pickle
 except:
    import pickle
 import pprint
@@ -64,17 +64,17 @@ def get_name(var_obj):
     return var_obj.local_name
 
 def compare_output(ordered_tests, tests_to_actual, tests_to_expected):
-    print('tests_to_expected',tests_to_expected)
-    print('tests_to_actual', tests_to_actual)
+    print 'tests_to_expected',tests_to_expected
+    print 'tests_to_actual', tests_to_actual
     error_vector = []
     if GRADER:
-        print('GRADER.tests()',GRADER.tests())
+        print 'GRADER.tests()',GRADER.tests()
         for (i, test) in enumerate(GRADER.tests()):
-            print(i, test)
+            print i, test
             actual = tests_to_actual[ordered_tests[i]]
             expected = tests_to_expected[ordered_tests[i]]
-            print('actual', actual)
-            print('expected', expected)
+            print 'actual', actual
+            print 'expected', expected
             if actual != '':
                 error_vector.append(test.compare_results(expected, actual))
             else:
@@ -324,9 +324,9 @@ class Line(object):
             step4 = step3.replace('_left_brace_', '{');
             return step4.replace('_right_brace_', '}')
         except:
-            print("original:", self.template)
-            print("replace braces:", step1)
-            print("replaces blanks:", step2)
+            print "original:", self.template
+            print "replace braces:", step1
+            print "replaces blanks:", step2
             raise
 
 
@@ -393,7 +393,7 @@ def populate_from_pickles(all_solutions, pickleSrc):
     mutates all_solutions
     """
 
-    print("Loading data")
+    print "Loading data"
 
     # Get the correct answer from answer.py
     answer_path = path.join(pickleSrc, 'answer.pickle')
@@ -404,7 +404,7 @@ def populate_from_pickles(all_solutions, pickleSrc):
 
         testcases, correct_outputs = unpickled['testcases'], unpickled['outputs']
         testcase_to_correct_output = {testcases[i]: correct_outputs[i] for i in range(len(testcases))}
-        print("ANSWER:", testcase_to_correct_output)
+        print "ANSWER:", testcase_to_correct_output
 
     
     # Now load the rest of the solutions
@@ -419,7 +419,7 @@ def populate_from_pickles(all_solutions, pickleSrc):
             try:
                 unpickled = pickle.load(f)
             except:
-                print('probably too large')
+                print 'probably too large'
                 #sys.exit()
                 skip_flag = True
         if not skip_flag:
@@ -509,7 +509,7 @@ def find_template_info_scores(abstracts):
     total = float(sum(counts.values()))
 
     # log2(1/p)
-    scores = { template: log(total/count, 2) for template, count in counts.items() }
+    scores = { template: log(total/count, 2) for template, count in counts.iteritems() }
 
     # Set a threshold that will separate templates that appear once from those
     # that appear more than once. The difference in entropy between a template
@@ -518,8 +518,8 @@ def find_template_info_scores(abstracts):
     try:
         threshold = log(total/2.0, 2) + 0.5
     except ValueError:
-        print("counts:", counts)
-        print("total:", total)
+        print "counts:", counts
+        print "total:", total
         return
     return (scores, threshold)
 
@@ -581,7 +581,7 @@ def extract_variable_seqs(all_solutions,
     skipped = []
     for sol in all_solutions[:]:
         try:
-            print("Collecting variables in", sol.solnum)
+            print "Collecting variables in", sol.solnum
             extract_sequences_single_sol(sol, correct_abstracts)
             if sol.correct:
                 correct_solutions.append(sol)
@@ -684,7 +684,7 @@ def compute_lines(sol, tidy_path, all_lines):
             # Grab a list of (local name, var_obj) pairs in the order
             # they appear and transform it into two ordered lists of local
             # names and variable objects
-            local_names, variable_objects = list(zip(*[mappings[blank] for blank in blanks]))
+            local_names, variable_objects = zip(*[mappings[blank] for blank in blanks])
         else:
             local_names = ()
             variable_objects = ()
@@ -699,7 +699,7 @@ def compute_lines(sol, tidy_path, all_lines):
         line_values = []
         for lname in local_names:
             values = {}
-            for (testcase, trace) in sol.testcase_to_trace.items():
+            for (testcase, trace) in sol.testcase_to_trace.iteritems():
                 values[testcase] = extract_var_values_at_line(line_no, lname, trace)
             line_values.append(values)
         
@@ -724,7 +724,7 @@ def compute_all_lines(all_solutions, folderOfData, all_lines):
     for sol in all_solutions:
         tidy_path = path.join(folderOfData, 'tidyData', sol.solnum + '.py')
         try:
-            print("Computing lines for", sol.solnum)
+            print "Computing lines for", sol.solnum
             compute_lines(sol, tidy_path, all_lines)
         except RenamerException:
             skipped.append(sol.solnum)
@@ -747,7 +747,7 @@ def fix_name_clashes(sol):
     if len(sol.abstract_vars) == len(set(sol.abstract_vars)):
         return
     assert len(sol.abstract_vars) > len(set(sol.abstract_vars))
-    print('Fixing clash in', sol.solnum)
+    print 'Fixing clash in', sol.solnum
 
     # Multiple instances of a single abstract variable
     for var in set(sol.abstract_vars):
@@ -763,7 +763,7 @@ def fix_name_clashes(sol):
                 suffix = string.ascii_uppercase[modifier]
                 new_name = abs_var.canon_name + suffix
                 local_var.clash_resolution_name = new_name
-                print("local var", local_var.local_name, "clash resolution:", new_name)
+                print "local var", local_var.local_name, "clash resolution:", new_name
 
 class RenamerException(Exception):
     """A problem occurred while calling identifier_renamer."""
@@ -840,7 +840,7 @@ def rewrite_all_solutions(all_solutions, folderOfData):
         tidy_path = path.join(folderOfData, 'tidyData', sol.solnum + '.py')
         canon_path = path.join(canon_folder, sol.solnum + '.py')
         try:
-            print("Rewriting", sol.solnum)
+            print "Rewriting", sol.solnum
             rewrite_source(sol, tidy_path, canon_path)
         except RenamerException:
             skipped.append(sol.solnum)
@@ -861,7 +861,7 @@ def stack_solutions(all_solutions, all_stacks):
     mutates all_stacks
     """
     for sol in all_solutions:
-        print("Stacking", sol.solnum)
+        print "Stacking", sol.solnum
         for stack in all_stacks:
             if stack.should_contain(sol):
                 stack.add_solution(sol)
@@ -1029,7 +1029,7 @@ def find_matching_var(var_to_match, correct_abstracts, scores, threshold):
     else:
         return ('no_match', None, None)
 
-def render_template_indices(xxx_todo_changeme, fill_in):
+def render_template_indices((template, indices), fill_in):
     """Helper function that takes a template and a set of indices, and
     returns the template with the specified blanks filled in with the given
     string.
@@ -1042,7 +1042,6 @@ def render_template_indices(xxx_todo_changeme, fill_in):
     >>> "___=___[index]*___[index]"
 
     """
-    (template, indices) = xxx_todo_changeme
     buildme = []
     last_end = 0
     for i, match in enumerate(re.finditer('___', template)):
@@ -1105,7 +1104,7 @@ def find_all_matching_vars(incorrect_solutions, correct_abstracts, incorrect_var
             if matched_var:
                 name = get_name(matched_var)
                 if name in seen_names:
-                    print("Fixing clash when fuzzy renaming", sol.solnum)
+                    print "Fixing clash when fuzzy renaming", sol.solnum
                     modifier = seen_names[name]
                     suffix = string.ascii_uppercase[modifier]
                     lvar.clash_resolution_name = name + suffix
@@ -1259,7 +1258,7 @@ class ElenaEncoder(json.JSONEncoder):
             return {'type':'set', 'list':list(obj)}
         if isinstance(obj, types.FunctionType):
             return {'type':'function'}
-        if isinstance(obj, type):
+        if isinstance(obj, types.TypeType):
             return {'type': 'type', 'value':str(obj)}
         if isinstance(obj, types.BuiltinFunctionType):
             return {'type': 'built-in', 'value':str(obj)}
@@ -1398,7 +1397,7 @@ def run(folderOfData, destFolder, compute_pairwise_distances):
     # Find the distance (as defined in Solution.distance_metric) between all
     # pairs of stacks.
     if compute_pairwise_distances:
-        print('Computing stack distances')
+        print 'Computing stack distances'
         find_sort_metrics_all(all_stacks)
 
     # Generate the output for json files. format_stack_output controls the
@@ -1429,10 +1428,10 @@ def run(folderOfData, destFolder, compute_pairwise_distances):
         with open(path.join(destFolder, 'variables.json'), 'w') as f:
             pprint.pprint(variables, f)
 
-    print("Number of solutions processed:", len(correct_solutions + incorrect_solutions))
-    print("Number of incorrect solutions:", len(incorrect_solutions))
-    print("Number of correct stacks:", len(correct_stacks))
-    print("Number of phrases:", len(formatted_phrases))
-    print("Number of variables:", len(variables))
-    print("skipped when extracting:", skipped_extraction)
-    print("skipped when rewriting:", skipped_by_renamer)
+    print "Number of solutions processed:", len(correct_solutions + incorrect_solutions)
+    print "Number of incorrect solutions:", len(incorrect_solutions)
+    print "Number of correct stacks:", len(correct_stacks)
+    print "Number of phrases:", len(formatted_phrases)
+    print "Number of variables:", len(variables)
+    print "skipped when extracting:", skipped_extraction
+    print "skipped when rewriting:", skipped_by_renamer

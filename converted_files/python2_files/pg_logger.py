@@ -43,8 +43,8 @@ is_python3 = (sys.version_info[0] == 3)
 if is_python3:
   import io as StringIO
 else:
-  import io
-from . import pg_encoder
+  import StringIO
+import pg_encoder
 
 
 # TODO: not threadsafe:
@@ -361,7 +361,7 @@ def get_user_locals(frame):
 
 def filter_var_dict(d):
   ret = {}
-  for (k,v) in list(d.items()):
+  for (k,v) in d.items():
     if k not in IGNORE_VARS:
       ret[k] = v
   return ret
@@ -370,7 +370,7 @@ def filter_var_dict(d):
 # yield all function objects locally-reachable from frame,
 # making sure to traverse inside all compound objects ...
 def visit_all_locally_reachable_function_objs(frame):
-  for (k, v) in list(get_user_locals(frame).items()):
+  for (k, v) in get_user_locals(frame).items():
     for e in visit_function_obj(v, set()):
       if e: # only non-null if it's a function object
         assert type(e) in (types.FunctionType, types.MethodType)
@@ -409,7 +409,7 @@ def visit_function_obj(v, ids_seen_set):
         contents_dict = v.__dict__
 
       if contents_dict:
-        for (key_child, val_child) in list(contents_dict.items()):
+        for (key_child, val_child) in contents_dict.items():
           for key_child_res in visit_function_obj(key_child, ids_seen_set):
             yield key_child_res
           for val_child_res in visit_function_obj(val_child, ids_seen_set):
@@ -527,7 +527,7 @@ class PGLogger(bdb.Bdb):
     # to make an educated guess based on the contents of local
     # variables inherited from possible parent frame candidates.
     def get_parent_frame(self, frame):
-      for (func_obj, parent_frame) in list(self.closures.items()):
+      for (func_obj, parent_frame) in self.closures.items():
         # ok, there's a possible match, but let's compare the
         # local variables in parent_frame to those of frame
         # to make sure. this is a hack that happens to work because in
@@ -793,7 +793,7 @@ class PGLogger(bdb.Bdb):
           # effects of aliasing later down the line ...
           encoded_locals = {}
 
-          for (k, v) in list(get_user_locals(cur_frame).items()):
+          for (k, v) in get_user_locals(cur_frame).items():
             is_in_parent_frame = False
 
             # don't display locals that appear in your parents' stack frames,
@@ -911,7 +911,7 @@ class PGLogger(bdb.Bdb):
                   break
 
                 for frame_const in my_frame.f_code.co_consts:
-                  if frame_const is (v.__code__ if is_python3 else v.__code__):
+                  if frame_const is (v.__code__ if is_python3 else v.func_code):
                     chosen_parent_frame = my_frame
                     break
 
@@ -927,7 +927,7 @@ class PGLogger(bdb.Bdb):
                   self.zombie_frames.append(chosen_parent_frame)
         else:
           # if there is only a global scope visible ...
-          for (k, v) in list(get_user_globals(top_frame).items()):
+          for (k, v) in get_user_globals(top_frame).items():
             if (type(v) in (types.FunctionType, types.MethodType) and \
                 v not in self.closures):
               self.globally_defined_funcs.add(v)
@@ -967,7 +967,7 @@ class PGLogger(bdb.Bdb):
         # encode in a JSON-friendly format now, in order to prevent ill
         # effects of aliasing later down the line ...
         encoded_globals = {}
-        for (k, v) in list(get_user_globals(tos[0], at_global_scope=(self.curindex <= 1)).items()):
+        for (k, v) in get_user_globals(tos[0], at_global_scope=(self.curindex <= 1)).items():
           encoded_val = self.encoder.encode(v, self.get_parent_of_function)
           encoded_globals[k] = encoded_val
 
@@ -1177,7 +1177,7 @@ class PGLogger(bdb.Bdb):
         # be a dict, but in Python 3, __builtins__ seems to be a module,
         # so just handle both cases ... UGLY!
         if type(__builtins__) is dict:
-          builtin_items = list(__builtins__.items())
+          builtin_items = __builtins__.items()
         else:
           assert type(__builtins__) is types.ModuleType
           builtin_items = []
@@ -1207,7 +1207,7 @@ class PGLogger(bdb.Bdb):
         user_builtins['setCSS'] = setCSS
         user_builtins['setJS'] = setJS
 
-        user_stdout = io.StringIO()
+        user_stdout = StringIO.StringIO()
 
         sys.stdout = user_stdout
 
