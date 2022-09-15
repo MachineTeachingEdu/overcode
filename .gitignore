@@ -6,3 +6,4 @@ src/venv
 ui/data
 ui/output
 ui/testCase.py
+.python-version
