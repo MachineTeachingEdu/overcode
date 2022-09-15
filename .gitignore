@@ -3,3 +3,6 @@
 logging/grade.txt
 logging/*
 src/venv
+ui/data
+ui/output
+ui/testCase.py
