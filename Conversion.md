@@ -51,3 +51,8 @@ time.process_time()
 Tive que trocar essas 2 bibliotecas, usadas pelo Overcode para a limpeza de código, pelas bibliotecas Black e Python Minifier, compatíveis com Python 3.
 
 Essa mudança foi realizada no arquivo `pipeline_default_functions.py`.
+
+### Módulos internos
+
+#### pipeline_old.py
+Em `run_pipeline.py` comentei a linha do import do módulo `pipeline_old.py` que não é utilizado no pipeline principal e por isso não foi convertido para Python 3.

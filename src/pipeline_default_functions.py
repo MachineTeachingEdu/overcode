@@ -2,10 +2,15 @@ import sys
 import io
 import pprint
 
+# PYTHON 3 - SASSE
+'''
 from external import (
     pythonTidy,
     remove_comments,
 )
+'''
+import python_minifier as pm
+import black
 
 DEBUG_PRINTS = True
 
@@ -31,11 +36,17 @@ def tidy_one(source_path, dest_path, tested_function_name):
         containing this path must exist.
     tested_function_name: string, the name of the function being tested
     """
+
+    # PYTHON 3 - SASSE
+    '''
     tidy_up_buffer = io.StringIO()
     pythonTidy.tidy_up(source_path, tidy_up_buffer)
     new_src = remove_comments.minify(tidy_up_buffer.getvalue())
+    '''
+    minified_code = pm.minify(source_path)
+    blackened_code = black.format_str(minified_code, mode=black.FileMode())
 
-    lines = new_src.split('\n')
+    lines = blackened_code.split('\n')
     with open(dest_path, 'w') as f:
         for line in lines:
             if line.strip() == '#!/usr/bin/python':

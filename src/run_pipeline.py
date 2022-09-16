@@ -4,7 +4,8 @@ from os import path
 import pprint
 
 import pipeline_preprocessing
-import pipeline_old
+# PYTHON3 - SASSE
+# import pipeline_old
 import pipeline
 
 ###############################################################################
