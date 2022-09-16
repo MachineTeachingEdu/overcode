@@ -32,7 +32,7 @@
 
 
 import ast
-import io
+import cStringIO
 import json
 import sys
 
@@ -111,7 +111,7 @@ class AddExtentsVisitor(ast.NodeVisitor):
                 self.visit_children(node)
                 return
 
-        raise NotImplementedError(node.__class__)
+        raise NotImplementedError, node.__class__
 
     # copied from Lib/ast.py generic_visit
     def visit_children(self, node):
@@ -840,7 +840,7 @@ class BalanceParensVisitor(ast.NodeVisitor):
                             paren_level += 1
                         if c == ')':
                             paren_level -= 1
-                        print('>', i, c)
+                        print '>', i, c
 
                     if paren_level > 0:
                         # more '(' than ')'
@@ -851,11 +851,11 @@ class BalanceParensVisitor(ast.NodeVisitor):
                         # TODO: adjust node.start_col and node.lineno
                         # backwards to match
 
-                    print(node.abs_start_index, node.abs_end_index)
-                    print(repr(self.code_str[node.abs_start_index:node.abs_end_index]))
-                    print(kids_extents)
-                    print(paren_level)
-                    print()
+                    print node.abs_start_index, node.abs_end_index
+                    print `self.code_str[node.abs_start_index:node.abs_end_index]`
+                    print kids_extents
+                    print paren_level
+                    print
                     
 
 def extent_contains(parent, child):
@@ -1102,9 +1102,9 @@ class CodeAst(object):
 
             if isinstance(node, ast.AST):
                 if newline:
-                    print(ind + node.__class__.__name__, end=' ')
+                    print ind + node.__class__.__name__,
                 else:
-                    print(node.__class__.__name__, end=' ')
+                    print node.__class__.__name__,
 
                 if hasattr(node, 'lineno'):
                     if not node.is_placeholder:
@@ -1114,7 +1114,7 @@ class CodeAst(object):
                             # cross-check:
                             s = self.code_str[node.abs_start_index:node.abs_end_index]
                             assert s == contents
-                            print('>>', repr(contents))
+                            print '>>', repr(contents)
                         # multiline
                         else:
                             assert node.end_lineno > node.lineno
@@ -1135,23 +1135,23 @@ class CodeAst(object):
                             # cross-check:
                             s = self.code_str[node.abs_start_index:node.abs_end_index]
                             assert s == contents
-                            print('ML>>', repr(contents))
+                            print 'ML>>', repr(contents)
                     else:
-                        print()
+                        print
                 else:
-                    print()
+                    print
 
                 for (fieldname, f) in ast.iter_fields(node):
-                    print(next_ind + fieldname + ':', end=' ')
+                    print next_ind + fieldname + ':',
                     _format(f, indent+1)
 
             elif isinstance(node, list):
-                print('[')
+                print '['
                 for e in node:
                     _format(e, indent+1, True)
-                print(ind + ']')
+                print ind + ']'
             else:
-                print(repr(node))
+                print repr(node)
 
         if not isinstance(self.ast_root, ast.AST):
             raise TypeError('expected ast.AST, got %r' %
@@ -1172,11 +1172,11 @@ class CodeAst(object):
         # we might falsely grab a '#' comment out of a string literal,
         # or a dot out of a numeric literal
         if node.__class__ in AddExtentsVisitor.TERMINAL_NODES:
-            print(leading_str, json.dumps(s), file=self.outbuf)
+            print >> self.outbuf, leading_str, json.dumps(s)
             self.gobbled_string_lst.append(s)
             return # get out!
 
-        print(leading_str, file=self.outbuf)
+        print >> self.outbuf, leading_str
 
 
         # 'line' is guaranteed to be a single line
@@ -1192,11 +1192,11 @@ class CodeAst(object):
                 # recurse!
                 _relex_helper(prefix_str)
 
-                print(",", file=self.outbuf) # ugh commas
+                print >> self.outbuf, "," # ugh commas
 
                 # then dump out the comment
                 t = '{"type": "comment", "value": %s, "id": "tid_%d"}'
-                print(t % (json.dumps(comment_str), self.get_tid()), file=self.outbuf)
+                print >> self.outbuf, t % (json.dumps(comment_str), self.get_tid())
                 self.gobbled_string_lst.append(comment_str)
             except ValueError:
                 # no comments, so lex away!
@@ -1219,17 +1219,17 @@ class CodeAst(object):
                     if prefix:
                         assert not prefix.strip() # should be ALL whitespace
                         _relex_helper(prefix)
-                        print(",", file=self.outbuf) # ugh commas
+                        print >> self.outbuf, "," # ugh commas
                     t = '{"type": "token", "value": %s, "id": "tid_%d"}'
-                    print(t % (json.dumps(tok), self.get_tid()), file=self.outbuf)
+                    print >> self.outbuf, t % (json.dumps(tok), self.get_tid())
                     self.gobbled_string_lst.append(tok)
                     if suffix:
                         assert not suffix.strip() # should be ALL whitespace
-                        print(",", file=self.outbuf) # ugh commas
+                        print >> self.outbuf, "," # ugh commas
                         _relex_helper(suffix)
                 else:
                     # degenerate case -- let it pass through un-lexed for now
-                    print(json.dumps(line), file=self.outbuf)
+                    print >> self.outbuf, json.dumps(line)
                     self.gobbled_string_lst.append(line) # sanity checking!
 
 
@@ -1238,7 +1238,7 @@ class CodeAst(object):
 
             # trivial -- multiple lines of whitespace and junk
             if s.strip() == '':
-                print(json.dumps(s), file=self.outbuf)
+                print >> self.outbuf, json.dumps(s)
                 self.gobbled_string_lst.append(s) # for sanity checking!
             else:
                 # do NOT call splitlines() since that omits the trailing '\n'
@@ -1248,7 +1248,7 @@ class CodeAst(object):
                     _relex_helper(line)
                     # if it's not the LAST line
                     if i < len(lines) - 1:
-                        print(',', json.dumps('\n'), ',', file=self.outbuf)
+                        print >> self.outbuf, ',', json.dumps('\n'), ','
                         self.gobbled_string_lst.append('\n')
         else:
             # single-line case, so gobble up the entire line
@@ -1264,8 +1264,8 @@ class CodeAst(object):
     # abs_start_index:abs_end_index to make indexing INFINITELY SIMPLER!
     def to_renderable_json(self, compact=False, debug=False, ignore_id=False):
         if debug:
-            print(repr(self.code_str))
-            print()
+            print repr(self.code_str)
+            print
 
         # starts at 0 and sweeps through the entirety of self.code_str
         # so that ALL CHARACTERS in self.code_str end up "printed" in
@@ -1276,17 +1276,17 @@ class CodeAst(object):
         # (verify that it matches self.code_str at the end)
         self.gobbled_string_lst = []
 
-        self.outbuf = io.StringIO()
+        self.outbuf = cStringIO.StringIO()
 
-        print('{"type": "ROOT_NODE", "id": "id_ROOT", ', file=self.outbuf)
-        print(' "contents": [', file=self.outbuf)
+        print >> self.outbuf, '{"type": "ROOT_NODE", "id": "id_ROOT", '
+        print >> self.outbuf, ' "contents": ['
 
         has_leading_text = False
 
         # gobble up everything until we reach the root node
         if self.cur_index < self.ast_root.abs_start_index:
             s = self.code_str[self.cur_index:self.ast_root.abs_start_index]
-            if debug: print('LEADING:', repr(s))
+            if debug: print 'LEADING:', `s`
             if s:
                 self.relex_and_print(s, '   ', self.ast_root)
                 has_leading_text = True
@@ -1300,7 +1300,7 @@ class CodeAst(object):
             is_first_json_elt = True
 
             if debug:
-                print(ind_str + '{', node.__class__.__name__, self.cur_index)
+                print ind_str + '{', node.__class__.__name__, self.cur_index
             c = ''
             if need_leading_comma:
                 c = ', '
@@ -1312,13 +1312,13 @@ class CodeAst(object):
                 assert _id not in self.all_ids # make sure ids are all unique
                 self.all_ids.add(_id)
  
-            print(ind_str + c, end=' ', file=self.outbuf)
-            print('{%s, "id": "id_%d",' % (get_node_attr_json(node), _id), file=self.outbuf)
-            print(ind_str + ' "contents": [', file=self.outbuf)
+            print >> self.outbuf, ind_str + c,
+            print >> self.outbuf, '{%s, "id": "id_%d",' % (get_node_attr_json(node), _id)
+            print >> self.outbuf, ind_str + ' "contents": ['
 
             if self.cur_index < node.abs_start_index:
                 s = self.code_str[self.cur_index:node.abs_start_index]
-                if debug: print(ind_str, 'B:', repr(s))
+                if debug: print ind_str, 'B:', `s`
                 self.relex_and_print(s, ind_str, node)
                 is_first_json_elt = False
                 self.cur_index = node.abs_start_index
@@ -1341,22 +1341,22 @@ class CodeAst(object):
                     if (not prematurely_done and
                         node.abs_end_index <= cur_kid.abs_start_index):
                         s = self.code_str[self.cur_index:node.abs_end_index]
-                        if debug: print(ind_str, 'K (prematurely_done):', repr(s))
+                        if debug: print ind_str, 'K (prematurely_done):', `s`
 
                         c = '' if is_first_json_elt else ','
                         self.relex_and_print(s, ind_str + ' ' + c, node)
                         self.cur_index = node.abs_end_index
                         prematurely_done = True
 
-                        if debug: print(ind_str, '} (prematurely_done)', self.cur_index)
-                        print(ind_str, ' ]', file=self.outbuf)
-                        print(ind_str, '}', file=self.outbuf)
+                        if debug: print ind_str, '} (prematurely_done)', self.cur_index
+                        print >> self.outbuf, ind_str, ' ]'
+                        print >> self.outbuf, ind_str, '}'
                         # hacky way to indicate that we've "popped up" a level
                         indent -= 1
                         is_first_json_elt = False # tricky!
 
                     s = self.code_str[self.cur_index:cur_kid.abs_start_index]
-                    if debug: print(ind_str, 'K:', repr(s))
+                    if debug: print ind_str, 'K:', `s`
                     c = '' if is_first_json_elt else ','
                     self.relex_and_print(s, ind_str + ' ' + c, node)
                     self.cur_index = cur_kid.abs_start_index
@@ -1372,16 +1372,16 @@ class CodeAst(object):
             if self.cur_index < node.abs_end_index:
                 s = self.code_str[self.cur_index:node.abs_end_index]
                 if debug:
-                    print(ind_str, 'A:', repr(s), self.cur_index, node.abs_end_index)
+                    print ind_str, 'A:', `s`, self.cur_index, node.abs_end_index
                 c = '' if is_first_json_elt else ','
                 self.relex_and_print(s, ind_str + ' ' + c, node)
                 self.cur_index = node.abs_end_index
                 is_first_json_elt = False
 
             if not prematurely_done:
-                if debug: print(ind_str, '}', self.cur_index)
-                print(ind_str, ' ]', file=self.outbuf)
-                print(ind_str + '}', file=self.outbuf)
+                if debug: print ind_str, '}', self.cur_index
+                print >> self.outbuf, ind_str, ' ]'
+                print >> self.outbuf, ind_str + '}'
 
         if not isinstance(self.ast_root, ast.Module):
             raise TypeError('expected ast.Module, got %r' %
@@ -1394,19 +1394,19 @@ class CodeAst(object):
         # gobble up everything until the end of the string
 
         s = self.code_str[self.cur_index:]
-        if debug: print('TRAILING:', repr(s))
+        if debug: print 'TRAILING:', `s`
         if s:
             self.relex_and_print(s, '    ,', self.ast_root)
 
-        print('  ]', file=self.outbuf)
-        print('}', file=self.outbuf)
+        print >> self.outbuf, '  ]'
+        print >> self.outbuf, '}'
 
         # VERY IMPORTANT sanity check that we've accounted for all
         # characters in self.code_str
         assert ''.join(self.gobbled_string_lst) == self.code_str
 
         if debug:
-            print(self.outbuf.getvalue())
+            print self.outbuf.getvalue()
 
         # make sure this parses as legal JSON!
         out_dat = json.loads(self.outbuf.getvalue())
@@ -1431,7 +1431,7 @@ def optimize_output_dict(d):
     def _opt_helper_1(obj):
         if type(obj) is dict:
             ret = {}
-            for k, v in obj.items():
+            for k, v in obj.iteritems():
                 ret[k] = _opt_helper_1(v)
             return ret
         elif type(obj) is list:
@@ -1447,8 +1447,8 @@ def optimize_output_dict(d):
             for e in tmp:
                 if not ret:
                     ret.append(e)
-                elif (type(ret[-1]) in (str, str) and
-                      type(e) in (str, str)):
+                elif (type(ret[-1]) in (str, unicode) and
+                      type(e) in (str, unicode)):
                     ret[-1] += e
                 else:
                     ret.append(e)
@@ -1456,7 +1456,7 @@ def optimize_output_dict(d):
             return ret
         else:
             if obj:
-                assert type(obj) in (str, str), repr(obj)
+                assert type(obj) in (str, unicode), `obj`
             return obj # verbatim
 
     # Phase 2:
@@ -1464,11 +1464,11 @@ def optimize_output_dict(d):
     def _opt_helper_2(obj):
         if type(obj) is dict:
             ret = {}
-            for k, v in obj.items():
+            for k, v in obj.iteritems():
                 if (k == "contents" and
                     type(v) is list and
                     len(v) == 1 and
-                    type(v[0]) in (str, str)):
+                    type(v[0]) in (str, unicode)):
                     ret["value"] = v[0]
                 else:
                     ret[k] = _opt_helper_2(v)
@@ -1480,7 +1480,7 @@ def optimize_output_dict(d):
             return ret
         else:
             if obj:
-                assert type(obj) in (str, str), repr(obj)
+                assert type(obj) in (str, unicode), `obj`
             return obj # verbatim
 
     assert type(d) is dict
@@ -1503,7 +1503,7 @@ def output_dict_to_str(d):
                 if type(e) is dict:
                     _helper(e)
                 else:
-                    assert type(e) in (str, str)
+                    assert type(e) in (str, unicode)
                     output_str.append(e)
         else:
             assert False
@@ -1519,13 +1519,13 @@ if __name__ == "__main__":
     obj = CodeAst(code_str)
     #obj = parse_and_add_extents(code_str)
     
-    print(code_str, end=' ')
-    print('===')
+    print code_str,
+    print '==='
     obj.pretty_dump()
     #print ast.dump(obj,annotate_fields=True, include_attributes=True)
 
 
     # don't print the JSON, but at least confirm that it RENDERS without
     # errors so that we can exercise the code
-    print('--- JSON ---')
-    print(obj.to_renderable_json(ignore_id=True))
+    print '--- JSON ---'
+    print obj.to_renderable_json(ignore_id=True)

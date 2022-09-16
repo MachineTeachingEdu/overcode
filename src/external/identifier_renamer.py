@@ -16,7 +16,7 @@ __all__ = ['rename_identifier', 'rename_identifier_JSON_version']
 
 
 import ast
-import ast_extents
+from . import ast_extents
 from collections import defaultdict
 import json
 

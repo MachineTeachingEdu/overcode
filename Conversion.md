@@ -31,6 +31,8 @@ por:
 from . import pg_encoder
 ```
 
+Tive que fazer o mesmo no arquivo `src/external/identifier_renamer.py` no import do módulo `ast_extents`.
+
 ## Lidando com os imports
 
 No entanto, o 2to3 não consegue resolver problemas de compatibilidade das bibliotecas utilizadas originalmente.
