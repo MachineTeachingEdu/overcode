@@ -25,7 +25,7 @@ pandas==0.18.1
 pathlib2==2.1.0
 pexpect==4.0.1
 pickleshare==0.7.2
-Pillow==3.2.0
+Pillow==9.0.1
 ptyprocess==0.5.1
 #pylab==0.1.3
 pyparsing==2.1.4
