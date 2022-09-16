@@ -33,6 +33,39 @@ from . import pg_encoder
 
 Tive que fazer o mesmo no arquivo `src/external/identifier_renamer.py` no import do módulo `ast_extents`.
 
+### Pickle
+
+No Python 3 temos que abrir e escrever os arquivos como binários para poder utilizar o módulo `pickle` (de serialização de objetos), usando um argumento específico para isso (`'wb'`em vez de `'w'` e `'rb'` em vez `'r'`). No Python 2 isso não era necessário, o que gerou erros durante a conversão. Descobri aqui: https://stackoverflow.com/a/50776489/8678699.
+
+Por exemplo, tive que trocar as seguintes linhas em `src/pipeline_preprocessing`:
+```
+with open(pickle_path, 'w') as f:
+            pickle.dump(to_pickle, f)
+```
+por:
+```
+with open(pickle_path, 'wb') as f:
+            pickle.dump(to_pickle, f)
+```
+
+Tive que fazer essas alterações em:
+```
+src/pipeline.py
+src/pipeline_preprocessing.py
+src/pipeline_preprocessing_tests.py
+```
+
+### Testcase
+
+No README original do Overcode, era dito que os testes deveriam ser escritos no arquivo `testCase.py` da seguinte maneira:
+```
+print function_to_test()
+```
+No entanto, com a mudança para Python 3, devemos chamar o `print` sempre com parênteses, por isso devemos usar o `testCase.py` desta forma:
+```
+print (function_to_test())
+```
+
 ## Lidando com os imports
 
 No entanto, o 2to3 não consegue resolver problemas de compatibilidade das bibliotecas utilizadas originalmente.

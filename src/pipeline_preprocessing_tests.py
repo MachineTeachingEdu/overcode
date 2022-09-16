@@ -140,7 +140,7 @@ class TestPreprocessor(unittest.TestCase):
 
         try:
             fpath = os.path.join(TEST_DIR_PATH, 'pickleFiles', 'testMe000.pickle')
-            with open(fpath, 'r') as f:
+            with open(fpath, 'rb') as f:
                 unpickled = pickle.load(f)
         except IOError:
             self.fail("Failed to load pickle file")

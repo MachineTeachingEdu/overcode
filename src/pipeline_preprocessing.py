@@ -246,9 +246,8 @@ def do_pickle(sol_id, all_traces, all_outputs, testcases, dest_dir):
 
     # Dump out
     pickle_path = path.join(dest_dir, sol_id + '.pickle')
-
     try:
-        with open(pickle_path, 'w') as f:
+        with open(pickle_path, 'wb') as f:
             pickle.dump(to_pickle, f)
     except (pickle.PicklingError, TypeError):
         # If something goes wrong, clean up, then pass the exception back up

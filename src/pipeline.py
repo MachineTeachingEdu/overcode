@@ -399,7 +399,7 @@ def populate_from_pickles(all_solutions, pickleSrc):
     answer_path = path.join(pickleSrc, 'answer.pickle')
     print(answer_path)
     if path.isfile(answer_path):
-        with open(answer_path, 'r') as f:
+        with open(answer_path, 'rb') as f:
             unpickled = pickle.load(f)
 
         testcases, correct_outputs = unpickled['testcases'], unpickled['outputs']
@@ -415,7 +415,7 @@ def populate_from_pickles(all_solutions, pickleSrc):
         if solnum == "answer":
             continue
 
-        with open(path.join(pickleSrc, filename), 'r') as f:
+        with open(path.join(pickleSrc, filename), 'rb') as f:
             try:
                 unpickled = pickle.load(f)
             except:
