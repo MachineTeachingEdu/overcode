@@ -11,6 +11,7 @@ from external import (
 '''
 import python_minifier as pm
 import black
+from external import remove_docstrings
 
 DEBUG_PRINTS = True
 
@@ -43,9 +44,10 @@ def tidy_one(source_path, dest_path, tested_function_name):
     pythonTidy.tidy_up(source_path, tidy_up_buffer)
     new_src = remove_comments.minify(tidy_up_buffer.getvalue())
     '''
-    # breakpoint()
+
     with open(source_path, 'r') as f:
-        minified_code = pm.minify(f.read())
+        code = remove_docstrings.remove_docstrings(f.read())
+        minified_code = pm.minify(code)
     blackened_code = black.format_str(minified_code, mode=black.FileMode())
 
     lines = blackened_code.split('\n')
