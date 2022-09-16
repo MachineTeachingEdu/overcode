@@ -43,7 +43,9 @@ def tidy_one(source_path, dest_path, tested_function_name):
     pythonTidy.tidy_up(source_path, tidy_up_buffer)
     new_src = remove_comments.minify(tidy_up_buffer.getvalue())
     '''
-    minified_code = pm.minify(source_path)
+    # breakpoint()
+    with open(source_path, 'r') as f:
+        minified_code = pm.minify(f.read())
     blackened_code = black.format_str(minified_code, mode=black.FileMode())
 
     lines = blackened_code.split('\n')
@@ -54,6 +56,8 @@ def tidy_one(source_path, dest_path, tested_function_name):
             if line.strip() == '# -*- coding: utf-8 -*-':
                 continue
             if line.strip() == 'None':
+                continue
+            if line.strip() == '# Created by pyminifier (https://github.com/liftoff/pyminifier)':
                 continue
 
             # This Is Just To Say
