@@ -40,10 +40,14 @@ import types
 is_python3 = (sys.version_info[0] == 3)
 
 # NB: don't use cStringIO since it doesn't support unicode!!!
+# SASSE - PYTHON 3
+'''
 if is_python3:
   import io as StringIO
 else:
   import io
+'''
+import io
 from . import pg_encoder
 
 
