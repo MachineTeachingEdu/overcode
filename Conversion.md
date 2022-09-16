@@ -15,6 +15,10 @@ Esse programa já vem instalado junto com o Python 3. Se, por exemplo, quisermos
 ```
 2to3 --output-dir=pasta_raiz/pasta_destino_python3 -W -n pasta_raiz/pasta_origem_python2 
 ```
+ou
+```
+python -m lib2to3 --output-dir=pasta_raiz/pasta_destino_python3 -W -n pasta_raiz/pasta_origem_python2 
+```
 ## Corrigindo detalhes
 
 ### Imports locais
