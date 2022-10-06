@@ -3,6 +3,7 @@ from collections import Counter
 import imp
 import json
 from math import log
+from operator import itemgetter
 import os
 from os import path
 #import pickle
@@ -495,8 +496,8 @@ def find_canon_names(all_abstracts):
 
     # For each name, assign modifiers if necessary in order of popularity
     for name in name_dict:
-        # Sorting tuples uses the first element by default, no need to specify
-        name_dict[name].sort(reverse=True)
+        # We define sort to use the first element of the tuple (the count)
+        name_dict[name].sort(reverse=True, key=itemgetter(0))
         for i in range(len(name_dict[name])):
             count, abstract = name_dict[name][i]
             append = '' if i == 0 else '___' + str(i + 1)
