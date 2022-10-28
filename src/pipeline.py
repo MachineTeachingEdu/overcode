@@ -17,7 +17,7 @@ import string
 import types
 import sys
 
-from external import identifier_renamer
+from external.var_renamer import rename_var
 from pipeline_util import ensure_folder_exists, make_hashable
 from pipeline_default_functions import extract_sequences
 
@@ -640,7 +640,7 @@ def compute_lines(sol, tidy_path, all_lines):
     if sol.correct:
         fix_name_clashes(sol)
 
-    with open(tidy_path, 'U') as f:
+    with open(tidy_path) as f:
         # It's not renamed yet, but the variable has to have the same name so
         # that each time through the loop below changes it incrementally
         renamed_src = f.read()
@@ -655,9 +655,11 @@ def compute_lines(sol, tidy_path, all_lines):
             # This variable must be named the same as the one on the next
             # line. Do not change the name of this variable in an effort to
             # make it more readable. You will break the code and cry.
-            renamed_src = identifier_renamer.rename_identifier(
-                renamed_src, lvar.local_name, placeholder)
-        except:
+            renamed_src = rename_var(renamed_src, lvar.local_name, placeholder)
+            # TROCAR AQUI 
+        except Exception as e: # SASSE
+            print(e)  # SASSE
+            print('Failed to rename ' + str(sol.solnum))
             raise RenamerException('Failed to rename ' + str(sol.solnum))
 
         ctr += 1
@@ -767,7 +769,7 @@ def fix_name_clashes(sol):
                 print("local var", local_var.local_name, "clash resolution:", new_name)
 
 class RenamerException(Exception):
-    """A problem occurred while calling identifier_renamer."""
+    """A problem occurred while calling var_renamer.rename_var."""
 
 def rewrite_source(sol, tidy_path, canon_path):
     """
@@ -797,7 +799,7 @@ def rewrite_source(sol, tidy_path, canon_path):
             shared_name = lvar.abstract_var.canon_name
 
         try:
-            renamed_src = identifier_renamer.rename_identifier(
+            renamed_src = rename_var(
                 renamed_src, lvar.local_name, shared_name + extra_token)
         except:
             # Who knows what kind of exception this raises? Raise our own
@@ -811,7 +813,7 @@ def rewrite_source(sol, tidy_path, canon_path):
             shared_name = lvar.abstract_var.canon_name
 
         try:
-            renamed_src = identifier_renamer.rename_identifier(
+            renamed_src = rename_var(
                 renamed_src, shared_name + extra_token, shared_name)
         except:
             # Who knows what kind of exception this raises? Raise our own
@@ -1090,7 +1092,6 @@ def find_all_matching_vars(incorrect_solutions, correct_abstracts, incorrect_var
             otherwise.
     }
     """
-
     # Find the information given by the presence of any given template
     scores, threshold = find_template_info_scores(correct_abstracts)
     output = []
@@ -1374,7 +1375,6 @@ def run(folderOfData, destFolder, compute_pairwise_distances):
     # encounter errors during this process.
     all_lines = []
     skipped_by_renamer = compute_all_lines(all_solutions, folderOfData, all_lines)
-
     # Stack correct solutions. Populates correct_stacks with Stack objects.
     # Correct Solutions belong in the same stack if they have the same set of
     # Line objects, where Line objects are considered equal if their templates
