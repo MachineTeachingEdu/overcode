@@ -1,2 +1,5 @@
 #!/bin/sh
-python -m http.server 8000
+
+PYTHON="pipenv run python"
+
+$PYTHON -m http.server 8001

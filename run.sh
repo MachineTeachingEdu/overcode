@@ -5,12 +5,15 @@ set -e  # Interrompe o script se houver erro
 TARGET_PATH="${PWD}/ui"
 FUNCTION_NAME="posLetra"
 
+# Helper para chamar a versão certa do Python
+PYTHON="pipenv run python"
+
 # Verifica se foi passada a flag '-a', indicando que apenas a análise deve ser feita
 while getopts 'a' OPTION; do
     case "$OPTION" in
         a) 
             # Executa a análise das soluções
-            python src/run_pipeline.py $TARGET_PATH --run-pipeline -d
+            $PYTHON src/run_pipeline.py $TARGET_PATH --run-pipeline -d
             ;;
     esac
 done
@@ -19,9 +22,9 @@ done
 if (( $OPTIND == 1 ));
 then
     # Executa as soluções dos alunos
-    python src/run_pipeline.py $TARGET_PATH --run-pre -n $FUNCTION_NAME
+    $PYTHON src/run_pipeline.py $TARGET_PATH --run-pre -n $FUNCTION_NAME
     # Executa a análise das soluções
-    python src/run_pipeline.py $TARGET_PATH --run-pipeline -d
+    $PYTHON src/run_pipeline.py $TARGET_PATH --run-pipeline -d
 fi
 
 # Roda o servidor da interface
