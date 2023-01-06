@@ -8,6 +8,9 @@ FUNCTION_NAME="posLetra"
 # Helper para chamar a versão certa do Python
 PYTHON="pipenv run python"
 
+PYTHON_VERSION=$($PYTHON --version)
+echo "Running with: $PYTHON_VERSION"
+
 # Verifica se foi passada a flag '-a', indicando que apenas a análise deve ser feita
 while getopts 'a' OPTION; do
     case "$OPTION" in
