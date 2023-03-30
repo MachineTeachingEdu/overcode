@@ -399,7 +399,7 @@ def populate_from_pickles(all_solutions, pickleSrc):
     # Get the correct answer from answer.py
     answer_path = path.join(pickleSrc, 'answer.pickle')
     print(answer_path)
-    if path.isfile(answer_path):
+    if path.isfile(answer_path): # TODO adicionar else e exception, informando que não encontrou picklefiles
         with open(answer_path, 'rb') as f:
             unpickled = pickle.load(f)
 
