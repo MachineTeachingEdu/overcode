@@ -19,7 +19,7 @@ import sys
 
 from external.var_renamer import rename_var
 from pipeline_util import ensure_folder_exists, make_hashable
-from pipeline_default_functions import extract_sequences
+from pipeline_default_functions import extract_sequences, ExtractionException
 
 ###############################################################################
 ## NOTES
@@ -399,7 +399,7 @@ def populate_from_pickles(all_solutions, pickleSrc):
     # Get the correct answer from answer.py
     answer_path = path.join(pickleSrc, 'answer.pickle')
     print(answer_path)
-    if path.isfile(answer_path):
+    if path.isfile(answer_path): # TODO adicionar else e exception, informando que não encontrou picklefiles
         with open(answer_path, 'rb') as f:
             unpickled = pickle.load(f)
 
@@ -528,9 +528,6 @@ def find_template_info_scores(abstracts):
 ###############################################################################
 ## Variable sequence extraction
 ###############################################################################
-
-class ExtractionException(Exception):
-    """No __return__ value in a solution trace."""
 
 def extract_sequences_single_sol(sol, correct_abstracts):
     """

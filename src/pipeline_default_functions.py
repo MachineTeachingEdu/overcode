@@ -15,6 +15,18 @@ from external import remove_docstrings
 
 DEBUG_PRINTS = True
 
+class ExtractionException(Exception):
+    """Exception usually raised when there is a 'RecursionError: 
+       maximum recursion depth exceeded' error.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
 # def tidy_one_json(source_path, dest_path, tested_function_name):
 #     tidy_up_buffer = StringIO.StringIO()
 #     pythonTidy.tidy_up(source_path,tidy_up_buffer)

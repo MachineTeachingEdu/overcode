@@ -3,10 +3,15 @@ set -e  # Interrompe o script se houver erro
 
 # Path para os dados de soluções dos alunos
 TARGET_PATH="${PWD}/ui"
-FUNCTION_NAME="posLetra"
+
+# Pega o nome da funcao a ser executada
+FUNCTION_NAME=$(sed -n 's/def \([^(]*\)(.*):/\1/p' ui/data/answer.py)
 
 # Helper para chamar a versão certa do Python
 PYTHON="pipenv run python"
+
+PYTHON_VERSION=$($PYTHON --version)
+echo "Running with: $PYTHON_VERSION"
 
 # Verifica se foi passada a flag '-a', indicando que apenas a análise deve ser feita
 while getopts 'a' OPTION; do
