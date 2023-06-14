@@ -124,6 +124,14 @@ Vou ficar devendo uma explicação mais detalhada sobre como acessar o Banco de 
 
 * problem_id 820 - Posição da Letra
 
+### 7.3. Recuperando dados de questões pelo id
+
+É possível obter os dados de maneira mais rápida através dos scripts `get_answer.py`, `get_solutions.py` e `get_testcase.py`.
+
+O primeiro passo é passar as configurações do seu banco de dados em cada script (ainda não há um arquivo de configuração).
+
+Depois basta, rodar cada script e conforme solicitado, passar o id da questão desejada.
+
 ## 8. Organizar os dados para consumo do Overcode
 
 ### 8.0. Clonar o repositório do Overcode Py3
