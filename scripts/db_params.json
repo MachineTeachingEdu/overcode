@@ -1,0 +1,6 @@
+{
+  "host": "localhost",
+  "database": "db_test",
+  "user": "newuser",
+  "password": ""
+}

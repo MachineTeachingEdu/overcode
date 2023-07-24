@@ -1,5 +1,6 @@
 import sys
 import psycopg2
+import json
 
 
 def get_problems_with_at_least_n_solutions(n):
@@ -12,13 +13,9 @@ def get_problems_with_at_least_n_solutions(n):
     Returns:
         None
     """
-    # Database parameters
-    params = {
-        "host": "localhost",
-        "database": "db_test",
-        "user": "newuser",
-        "password": "",
-    }
+    # Load Database parameters
+    with open("db_params.json", "r") as f:
+        params = json.load(f)
 
     with psycopg2.connect(**params) as connection:
         with connection.cursor() as cursor:
@@ -48,3 +45,4 @@ if __name__ == "__main__":
         get_problems_with_at_least_n_solutions(n)
     else:
         print("No command line arguments provided. Please provide the minimum number of solutions.")
+

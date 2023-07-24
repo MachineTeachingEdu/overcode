@@ -1,4 +1,5 @@
 import sys
+import json
 import psycopg2
 
 
@@ -34,13 +35,9 @@ def get_testcase(problem_id):
         None
     """
 
-    # Database parameters
-    params = {
-        "host": "localhost",
-        "database": "db_test",
-        "user": "newuser",
-        "password": "",
-    }
+    # Load Database parameters
+    with open("db_params.json", "r") as f:
+        params = json.load(f)
 
     with psycopg2.connect(**params) as connection:
         with connection.cursor() as cursor:
