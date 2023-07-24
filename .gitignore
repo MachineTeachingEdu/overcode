@@ -8,3 +8,4 @@ ui/output
 ui/testCase.py
 .python-version
 .vscode/*
+problems_data/*
