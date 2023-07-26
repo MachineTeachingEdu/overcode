@@ -1,6 +1,7 @@
 import sys
 import psycopg2
 import json
+import os
 
 def get_answer(problem_id, dst_dir=""):
     """
@@ -9,12 +10,22 @@ def get_answer(problem_id, dst_dir=""):
 
     Args:
         problem_id (int): The ID of the problem for which the answer is requested.
+        dst_dir (str, optional): The destination directory where the 'answer.py' file will be created.
+            If not specified, the file will be created in the current working directory.
 
     Returns:
         None
 
     Raises:
         psycopg2.Error: If an error occurs during the database connection or query execution.
+
+    Notes:
+        - The 'db_params.json' file should contain the necessary parameters for the PostgreSQL connection.
+        - The 'content' column of the 'questions_solution' table in the database should store the answer as a string.
+
+    Example:
+        >>> get_answer(123, dst_dir="/path/to/directory")
+        Answer saved to '/path/to/directory/answer.py'
     """
 
     # Load Database parameters
@@ -39,7 +50,7 @@ def get_answer(problem_id, dst_dir=""):
             elif len(answer) > 1:
                 print("Error! More than one answer found!")
             else:
-                filepath = dst_dir + "answer.py"
+                filepath = os.path.join(dst_dir, "answer.py")
                 with open(filepath, "w") as f:
                     f.write(answer[0][0])
                     print(f"Answer saved to '{filepath}'")
@@ -53,4 +64,3 @@ if __name__ == "__main__":
   else:
       print("No command line arguments provided.")
 
-    
