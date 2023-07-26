@@ -1,100 +1,83 @@
 import argparse
-import json
 from os import path
-import pprint
-
 import pipeline_preprocessing
-# PYTHON3 - SASSE
-# import pipeline_old
 import pipeline
 
-###############################################################################
-## NOTES
-###############################################################################
-# From the command line, run 'python run_pipeline.py -h' or
-# 'python run_pipeline.py --help' for a description of how to run the pipeline
-# and/or preprocessor.
-###############################################################################
+def run_pipeline(basedir, run_pre=True, funcname='test', run_pipeline=True, distances=True, output_only=False):
+    """
+    Run the data preprocessing pipeline and analysis pipeline for a given target directory.
 
+    Args:
+        basedir (str): Path to a directory containing a 'data' subdirectory and a 'testCase.py' file.
 
-# Add possible options to the command line interface
-parser = argparse.ArgumentParser()
-parser.add_argument('basedir', metavar='TARGET_DIR',
-    help='Path to a directory containing a data subdirectory and a testCase.py file')
+        run_pre (bool, optional): Whether to run the preprocessor. Default is False.
 
-# preprocessor & arguments
-parser.add_argument('-P', '--run-pre', action='store_true',
-    help='Run the preprocessor.')
-parser.add_argument('-n', '--funcname', default='test', metavar='NAME',
-    help='The name of the function that is being tested. Calls to the named ' +
-         'function will be removed from student code during the tidying step ' +
-         'in the preprocessor.')
-parser.add_argument('-j', '--json',
-    help='The name of the JSON file that contains the python files and tests.')
-parser.add_argument('-u', '--just', action='store_true',
-    help='Just running the pre-processor on json, not the pipeline. Only works with -json.')
+        funcname (str, optional): The name of the function that is being tested. Calls to the named function
+                                  will be removed from student code during the tidying step in the preprocessor.
+                                  Default is 'test'.
 
-# pipeline & arguments
-parser.add_argument('-p', '--run-pipeline', action='store_true',
-    help='Run the analysis pipeline. Will not work if the preprocessor has ' +
-         'never been run.')
-parser.add_argument('-g', '--grader-path',
-    help='Path to an MITx grader, including the grade_*.py part. Used to ' +
-         'check correctness of student code in the pipeline.')
-parser.add_argument('-d', '--distances', action='store_true',
-    help='Include to calculate pairwise distances between all stacks.')
-parser.add_argument('-t', '--output-only', action='store_true',
-    help='Include to only calculate output during pre-processing pipeline.')
+        run_pipeline (bool, optional): Whether to run the analysis pipeline. Will not work if the preprocessor
+                                       has never been run. Default is False.
 
-parser.add_argument('-o', '--run-old', action='store_true',
-    help='Run the old pipeline. Legacy, not maintained.')
+        distances (bool, optional): Include to calculate pairwise distances between all stacks. Default is False.
 
-args = parser.parse_args()
+        output_only (bool, optional): Include to only calculate output during pre-processing pipeline. Default is False.
 
-# The data subdirectory
-datadir = path.join(args.basedir, 'data')
+    Returns:
+        None
+    """
 
-testcasePath = path.join(args.basedir, 'testCase.py')
+    # The data subdirectory
+    datadir = path.join(basedir, 'data')
 
-if args.json:
-    jsonPath = path.join(args.basedir, args.json)
-    print('jsonPath', jsonPath)
-    print('args.just',args.just)
-else:
+    # The testCase.py file
+    testcasePath = path.join(basedir, 'testCase.py')
+
+    # We won't be using JSON with Machine Teaching, so this is always False
     jsonPath = False
 
-#print datadir
-#print testcasePath
+    # preprocess
+    if run_pre:
+        if output_only:
+            print('Only output traced during preprocessor run.')
+        pipeline_preprocessing.preprocess_pipeline_data(
+            datadir,
+            testcasePath,
+            output_only,
+            funcname,
+            jsonPath,
+            None  # The value 'None' is not used here
+        )
 
-# if not args.just:
-#     args.just = False
+    # Run the analysis pipeline
+    if run_pipeline:
+        outputPath = path.join(basedir, 'output')
+        pipeline.run(datadir, outputPath, distances)
 
-#import sys
-#sys.exit(1)
+if __name__ == "__main__":
+    # Add possible options to the command line interface
+    parser = argparse.ArgumentParser()
+    parser.add_argument('basedir', metavar='TARGET_DIR',
+                        help='Path to a directory containing a data subdirectory and a testCase.py file')
 
-# preprocess
-if args.run_pre:
-    if args.output_only: print('only output traced')
-    pipeline_preprocessing.preprocess_pipeline_data(
-        datadir,
-        testcasePath,
-        args.output_only,
-        args.funcname,
-        jsonPath,
-        args.just
-    )
+    # preprocessor & arguments
+    parser.add_argument('-P', '--run-pre', action='store_true',
+                        help='Run the preprocessor.')
+    parser.add_argument('-n', '--funcname', default='test', metavar='NAME',
+                        help='The name of the function that is being tested. Calls to the named ' +
+                             'function will be removed from student code during the tidying step ' +
+                             'in the preprocessor.')
 
-if args.run_pipeline or args.run_old:
+    # pipeline & arguments
+    parser.add_argument('-p', '--run-pipeline', action='store_true',
+                        help='Run the analysis pipeline. Will not work if the preprocessor has ' +
+                             'never been run.')
+    parser.add_argument('-d', '--distances', action='store_true',
+                        help='Include to calculate pairwise distances between all stacks.')
+    parser.add_argument('-t', '--output-only', action='store_true',
+                        help='Include to only calculate output during pre-processing pipeline.')
 
-    if args.run_pipeline:
-        if args.json:
-            outputPath = jsonPath
-        else:
-            outputPath = path.join(args.basedir, 'output')
-        if args.grader_path:
-            pipeline.set_grader(args.grader_path)
-        pipeline.run(datadir, outputPath, args.distances)
-    else:
-        # The old, original pipeline. Here there be dragons.
-        outputPath = path.join(args.basedir, 'output_old')
-        pipeline_old.run(datadir, outputPath)
+    args = parser.parse_args()
+
+    run_pipeline(args.basedir, args.run_pre, args.funcname, args.run_pipeline, args.distances, args.output_only)
+
