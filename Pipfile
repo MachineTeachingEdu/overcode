@@ -12,6 +12,7 @@ python-minifier = "*"
 bowler = "*"
 ipython = "*"
 six = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

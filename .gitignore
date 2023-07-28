@@ -10,3 +10,4 @@ ui/testCase.py
 .vscode/*
 problems_data/*
 *.DS_Store
+venv
