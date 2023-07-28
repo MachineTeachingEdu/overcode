@@ -9,3 +9,4 @@ ui/testCase.py
 .python-version
 .vscode/*
 problems_data/*
+*.DS_Store
