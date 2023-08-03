@@ -8,18 +8,19 @@ def run_pipeline(basedir, run_pre=True, funcname='test', run_pipeline=True, dist
     Run the data preprocessing pipeline and analysis pipeline for a given target directory.
 
     Args:
-        basedir (str): Path to a directory containing a 'data' subdirectory and a 'testCase.py' file.
+        basedir (str): Path to a directory containing a 'data' subdirectory (containing students solutions and answer.py) 
+                       and a 'testCase.py' file.
 
-        run_pre (bool, optional): Whether to run the preprocessor. Default is False.
+        run_pre (bool, optional): Whether to run the preprocessor. Default is True.
 
         funcname (str, optional): The name of the function that is being tested. Calls to the named function
                                   will be removed from student code during the tidying step in the preprocessor.
                                   Default is 'test'.
 
         run_pipeline (bool, optional): Whether to run the analysis pipeline. Will not work if the preprocessor
-                                       has never been run. Default is False.
+                                       has never been run. Default is True.
 
-        distances (bool, optional): Include to calculate pairwise distances between all stacks. Default is False.
+        distances (bool, optional): Include to calculate pairwise distances between all stacks. Default is True.
 
         output_only (bool, optional): Include to only calculate output during pre-processing pipeline. Default is False.
 
