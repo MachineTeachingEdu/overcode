@@ -1,9 +1,9 @@
 import sys
 import re
 
-def extract_function_name(file_path):
+def get_function_name(file_path):
     """
-    Extract the function name from a Python file.
+    Get the function name from a Python file.
 
     Args:
         file_path (str): The path to the Python file.
@@ -28,10 +28,10 @@ def extract_function_name(file_path):
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         file_path = sys.argv[1]
-        function_name = extract_function_name(file_path)
+        function_name = get_function_name(file_path)
         if function_name:
             print("Extracted function name:", function_name)
         else:
             print("Function name not found in the file.")
     else:
-        print("Usage: python extract_function_name.py <file_path>")
+        print("Usage: python get_function_name.py <file_path>")
