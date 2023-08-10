@@ -1,7 +1,6 @@
 import sys
-import json
-import psycopg2
 import os
+from execute_query import execute_query
 
 
 def create_testcase(data, function_name, dst_dir=""):
@@ -41,35 +40,27 @@ def get_testcase(problem_id, dst_dir=""):
         None
     """
 
-    # Load Database parameters
-    with open("db_params.json", "r") as f:
-        params = json.load(f)
+    # Query test cases
+    query = f"""SELECT content
+                FROM questions_testcase qt
+                WHERE problem_id = {problem_id};"""
+    testcases = execute_query(query)
 
-    with psycopg2.connect(**params) as connection:
-        with connection.cursor() as cursor:
-            # Query test cases
-            query = f"""SELECT content
-                       FROM questions_testcase qt
-                       WHERE problem_id = {problem_id};"""
-            cursor.execute(query)
-            testcases = cursor.fetchall()
+    # Query function name
+    query = f"""SELECT header
+                FROM questions_solution qs
+                WHERE problem_id = {problem_id};"""
+    function_name = execute_query(query)
 
-            # Query function name
-            query = f"""SELECT header
-                       FROM questions_solution qs
-                       WHERE problem_id = {problem_id};"""
-            cursor.execute(query)
-            function_name = cursor.fetchall()
-
-            # Verify data
-            if testcases is None:
-                print("Error! No test cases found!")
-            elif function_name is None:
-                print("Error! No function name found!")
-            elif len(function_name) > 1:
-                print("Error! More than one function name found!")
-            else:
-                create_testcase(testcases, function_name[0][0], dst_dir)
+    # Verify data
+    if testcases is None:
+        print("Error! No test cases found!")
+    elif function_name is None:
+        print("Error! No function name found!")
+    elif len(function_name) > 1:
+        print("Error! More than one function name found!")
+    else:
+        create_testcase(testcases, function_name[0][0], dst_dir)
 
 
 if __name__ == "__main__":

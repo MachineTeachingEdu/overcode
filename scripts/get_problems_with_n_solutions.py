@@ -1,6 +1,5 @@
 import sys
-import psycopg2
-import json
+from execute_query import execute_query
 
 
 def get_problems_with_at_least_n_solutions(n):
@@ -13,28 +12,22 @@ def get_problems_with_at_least_n_solutions(n):
     Returns:
         None
     """
-    # Load Database parameters
-    with open("db_params.json", "r") as f:
-        params = json.load(f)
 
-    with psycopg2.connect(**params) as connection:
-        with connection.cursor() as cursor:
-            # Query problem IDs, count distinct user solutions, and filter for problems with at least n solutions
-            query = f"""SELECT problem_id, COUNT(DISTINCT user_id)
-                        FROM questions_userlog
-                        GROUP BY problem_id
-                        HAVING COUNT(DISTINCT user_id) >= {n};"""
-            cursor.execute(query)
-            problems = cursor.fetchall()
+    # Query problem IDs, count distinct user solutions, and filter for problems with at least n solutions
+    query = f"""SELECT problem_id, COUNT(DISTINCT user_id)
+                FROM questions_userlog
+                GROUP BY problem_id
+                HAVING COUNT(DISTINCT user_id) >= {n};"""
+    problems = execute_query(query)
 
-            # Verify data
-            if problems is None or len(problems) == 0:
-                print(f"Error! No problems found with at least {n} solutions from unique users!")
-            else:
-                for problem_id, count in problems:
-                    print(f"Problem ID: {problem_id}, Unique User Solution Count: {count}")
+    # Verify data
+    if problems is None or len(problems) == 0:
+        print(f"Error! No problems found with at least {n} solutions from unique users!")
+    else:
+        for problem_id, count in problems:
+            print(f"Problem ID: {problem_id}, Unique User Solution Count: {count}")
 
-                print(f"\nTotal number of problems with at least {n} solutions from unique users: {len(problems)}")
+        print(f"\nTotal number of problems with at least {n} solutions from unique users: {len(problems)}")
 
 
 if __name__ == "__main__":

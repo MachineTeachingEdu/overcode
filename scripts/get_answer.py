@@ -1,7 +1,6 @@
 import sys
-import psycopg2
-import json
 import os
+from execute_query import execute_query
 
 def get_answer(problem_id, dst_dir=""):
     """
@@ -28,32 +27,21 @@ def get_answer(problem_id, dst_dir=""):
         Answer saved to '/path/to/directory/answer.py'
     """
 
-    # Load Database parameters
-    with open("db_params.json", "r") as f:
-        params = json.load(f)
+    query = f""" SELECT content
+                FROM questions_solution qs
+                WHERE problem_id = {problem_id};"""
+    answer = execute_query(query)
 
-    with psycopg2.connect(**params) as connection:
-        with connection.cursor() as cursor:
-
-            # execute query with cursor
-            query = f""" SELECT content
-                      FROM questions_solution qs
-                      WHERE problem_id = {problem_id};"""
-            cursor.execute(query)
-
-            # retrieve results of query
-            answer = cursor.fetchall()
-
-            # verify data
-            if answer is None:
-                print("Error! No answer found!")
-            elif len(answer) > 1:
-                print("Error! More than one answer found!")
-            else:
-                filepath = os.path.join(dst_dir, "answer.py")
-                with open(filepath, "w") as f:
-                    f.write(answer[0][0])
-                    print(f"Answer saved to '{filepath}'")
+    # verify data
+    if answer is None:
+        print("Error! No answer found!")
+    elif len(answer) > 1:
+        print("Error! More than one answer found!")
+    else:
+        filepath = os.path.join(dst_dir, "answer.py")
+        with open(filepath, "w") as f:
+            f.write(answer[0][0])
+            print(f"Answer saved to '{filepath}'")
 
 if __name__ == "__main__":
   # Check if command line arguments exist

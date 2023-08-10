@@ -1,8 +1,7 @@
 import sys
 import os
 import shutil
-import json
-import psycopg2
+from execute_query import execute_query
 
 
 def create_solutions(data, dst_dir=""):
@@ -65,29 +64,22 @@ def get_solutions(problem_id, dst_dir=""):
         Python files for each solution saved to '/path/to/directory/data'
     """
 
-    # Load Database parameters
-    with open("db_params.json", "r") as f:
-        params = json.load(f)
+    # Query solutions and user IDs, getting only the most recent solution for each user
+    query = f"""SELECT solution, user_id
+                FROM (
+                    SELECT solution, user_id,
+                        ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY timestamp DESC) AS rn
+                    FROM questions_userlog
+                    WHERE problem_id = {problem_id}
+                ) AS submissions
+                WHERE rn = 1;"""
+    solutions = execute_query(query)
 
-    with psycopg2.connect(**params) as connection:
-        with connection.cursor() as cursor:
-            # Query solutions and user IDs, getting only the most recent solution for each user
-            query = f"""SELECT solution, user_id
-                        FROM (
-                            SELECT solution, user_id,
-                                ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY timestamp DESC) AS rn
-                            FROM questions_userlog
-                            WHERE problem_id = {problem_id}
-                        ) AS submissions
-                        WHERE rn = 1;"""
-            cursor.execute(query)
-            solutions = cursor.fetchall()
-
-            # Verify data
-            if solutions is None:
-                print("Error! No solutions found!")
-            else:
-                create_solutions(solutions, dst_dir)
+    # Verify data
+    if solutions is None:
+        print("Error! No solutions found!")
+    else:
+        create_solutions(solutions, dst_dir)
 
 
 if __name__ == "__main__":
