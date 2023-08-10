@@ -28,6 +28,12 @@ if the problem_<id> dir doesnt have a subdir called 'output' nor 'data', then th
 
 import os
 import sys
+
+# Add the root directory to the Python path
+root_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(root_dir, 'src'))
+sys.path.append(os.path.join(root_dir, 'scripts'))
+
 from scripts.get_function_name import get_function_name
 from src.run_pipeline import run_pipeline
 from scripts.replace_output_data import replace_output_data
