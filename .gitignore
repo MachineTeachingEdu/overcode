@@ -11,3 +11,4 @@ ui/testCase.py
 problems_data/*
 *.DS_Store
 venv
+*.backup
