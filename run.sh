@@ -1,37 +1,12 @@
 #!/bin/sh
-set -e  # Interrompe o script se houver erro
+set -e  # Interrupt on error
 
-# Path para os dados de soluções dos alunos
-TARGET_PATH="${PWD}/ui"
+# Build the images and start the containers
+docker compose up -d
 
-# Pega o nome da funcao a ser executada
-FUNCTION_NAME=$(sed -n 's/def \([^(]*\)(.*):/\1/p' ui/data/answer.py)
+# Run the master script inside the application container
+docker compose exec app python master_script.py
 
-# Helper para chamar a versão certa do Python
-PYTHON="pipenv run python"
+# Stop and remove the containers
+docker compose down
 
-PYTHON_VERSION=$($PYTHON --version)
-echo "Running with: $PYTHON_VERSION"
-
-# Verifica se foi passada a flag '-a', indicando que apenas a análise deve ser feita
-while getopts 'a' OPTION; do
-    case "$OPTION" in
-        a) 
-            # Executa a análise das soluções
-            $PYTHON src/run_pipeline.py $TARGET_PATH --run-pipeline -d
-            ;;
-    esac
-done
-
-# Se nao foram passadas flags, executa o pipeline completo
-if (( $OPTIND == 1 ));
-then
-    # Executa as soluções dos alunos
-    $PYTHON src/run_pipeline.py $TARGET_PATH --run-pre -n $FUNCTION_NAME
-    # Executa a análise das soluções
-    $PYTHON src/run_pipeline.py $TARGET_PATH --run-pipeline -d
-fi
-
-# Roda o servidor da interface
-cd ./ui
-./runServer.sh

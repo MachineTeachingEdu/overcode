@@ -1,0 +1,6 @@
+FROM postgres:latest
+
+COPY ./scripts/db_actions/db_dump.backup /docker-entrypoint-initdb.d/db_dump.backup
+COPY ./scripts/db_actions/initdb.sh /docker-entrypoint-initdb.d/initdb.sh
+
+RUN chmod +x /docker-entrypoint-initdb.d/initdb.sh

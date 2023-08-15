@@ -17,6 +17,9 @@ def execute_query(query, params=None):
     with open(db_params_path, "r") as f:
         db_params = json.load(f)
 
+    # Override the database parameters with environment variables if they exist.
+    db_params["host"] = os.environ.get("DB_HOST", db_params["host"])
+
     with psycopg2.connect(**db_params) as connection:
         with connection.cursor() as cursor:
             cursor.execute(query, params)
