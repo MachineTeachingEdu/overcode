@@ -1,6 +1,12 @@
 FROM postgres:latest
 
+# Install jq (for parsing db_params.json)
+RUN apt-get update && apt-get install -y jq
+
+# Copy dump and script for db restoration
 COPY ./scripts/db_actions/db_dump.backup /docker-entrypoint-initdb.d/db_dump.backup
 COPY ./scripts/db_actions/initdb.sh /docker-entrypoint-initdb.d/initdb.sh
+COPY ./scripts/db_params.json /docker-entrypoint-initdb.d/db_params.json
 
+# Make db restoration script executable
 RUN chmod +x /docker-entrypoint-initdb.d/initdb.sh
