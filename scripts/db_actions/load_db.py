@@ -13,11 +13,21 @@ password = db_params["password"]
 dbname = db_params["database"]
 dump_file = "db_dump.backup" 
 
+# Create an empty target database
+create_db_command = [
+    "createdb",
+    "--host", host,
+    "--port", port,
+    "--username", user,
+    "--no-password",
+    dbname
+]
+subprocess.run(create_db_command)
+
 # Restore data from the dump file to the target database
 restore_command = [
     "pg_restore",
     dump_file,
-    "--clean",
     "--dbname", dbname,
     "--host", host,
     "--port", port,
