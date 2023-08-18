@@ -2,11 +2,10 @@
 set -e  # Interrupt on error
 
 # Build the images and start the containers
-docker compose up -d
+docker compose up --detach --build
 
-# Run the master script inside the application container
-docker compose exec app python master_script.py
+# Run the CLI application and wait for its completion
+docker exec -it overcode-container /bin/bash -c "cd /app && python master_script.py 745"
 
-# Stop and remove the containers
-docker compose down
-
+# After the CLI application exits, stop and remove the containers
+docker-compose down
