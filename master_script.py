@@ -40,7 +40,7 @@ from scripts.replace_output_data import replace_output_data
 from scripts.run_interface import run_interface
 from scripts.get_problem_data import get_problem_data
 
-def run_master_script(problem_id):
+def run_master_script(problem_id, interface=True):
     """
     Master script to run Overcode on an existing problem whose ID is given as argument.
 
@@ -65,8 +65,11 @@ def run_master_script(problem_id):
 
         run_pipeline(problem_dir, funcname)
 
-    replace_output_data(problem_id, output_dir, os.path.join(interface_dir, "output"))
-    run_interface(interface_dir)
+    if interface:
+        replace_output_data(problem_id, output_dir, os.path.join(interface_dir, "output"))
+        run_interface(interface_dir)
+    
+    print(f"Master script finished running for problem {problem_id}.")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
