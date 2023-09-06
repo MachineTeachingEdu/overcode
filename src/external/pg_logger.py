@@ -57,8 +57,8 @@ from . import pg_encoder
 # infinite loops
 MAX_EXECUTED_LINES = 500
 
-#DEBUG = False
-DEBUG = True
+DEBUG = False
+# DEBUG = True
 
 BREAKPOINT_STR = '#break'
 

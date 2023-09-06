@@ -208,12 +208,12 @@ def do_logger_run(source, testcases, output_only):
     # RuntimeErrors from max recursion depth exceeded.
     # Make sure all_traces is the right length if this happens!
 
-    print('running do_logger_run')
+    # print('running do_logger_run')
     all_traces = []
     all_outputs = []
     for i, test_case in enumerate(testcases):
         # Print each time so the user can follow along with the progress
-        print("\t" + test_case)
+        # print("\t" + test_case)
 
         # append each test case in turn
         source_with_test = source + '\n\n' + test_case
@@ -227,7 +227,7 @@ def do_logger_run(source, testcases, output_only):
 
         all_traces.append(munged_trace)
         all_outputs.append(stdout)
-    print()
+    # print()
 
     return all_traces, all_outputs
 
