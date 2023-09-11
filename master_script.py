@@ -1,34 +1,7 @@
-# Prompt for ChatGPT
-
-'''
-So now I want to create the master script of my system:
-
-Create a function, runnable as a script, so that user should input only the problem id (lets call <id>).
-
-Then the function checks the '../problems_data/problem_<id>' directory (note that it doesnt always exist, neither the problems_data directory)
-
-if the problem_<id> dir has a subdir called 'output', then the script should call replace_output_data function (from replace_output_data.py) with the <id> and '../ui' as arguments.
-Then it should run the run_interface function from run_interface.py with '../ui' as argument.
-
-if the problem_<id> dir doesnt have a subdir called 'output', but has a subdir called 'data', then the script should:
-    - get the function name and save it in a variable (lets call it funcname)
-        * it will do that by calling the get_function_name function (from get_function_name.py) with '../problems_data/problem_<id>/data/answer.py' as argument
-    - call run_pipeline function (from run_pipeline.py) with base_dir='../problems_data/problem_<id>' and funcname=funcname.
-    - then it should call replace_output_data function (from replace_output_data.py) with the <id> and '../ui' as arguments.
-    - Then it should run the run_interface function from run_interface.py with '../ui' as argument.
-
-if the problem_<id> dir doesnt have a subdir called 'output' nor 'data', then the script should:
-    - call the get_problem_data function (from get_problem_data.py) with the <id> as argument.
-    - get the function name and save it in a variable (lets call it funcname)
-         * it will do that by calling the get_function_name function (from get_function_name.py) with '../problems_data/problem_<id>/data/answer.py' as argument
-    - call run_pipeline function (from run_pipeline.py) with base_dir=../problems_data/problem_<id> and funcname=funcname.
-    - then it should call replace_output_data function (from replace_output_data.py) with the <id> and '../ui' as arguments.
-    - Then it should run the run_interface function from run_interface.py with '../ui' as argument.
-'''
-
 import os
 import sys
 import time
+import json
 
 # Add the root directory to the Python path
 root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -49,11 +22,8 @@ def run_master_script(problem_id, interface=True):
         problem_id (int): The ID of the problem.
 
     Returns:
-        overcode_time (float): The CPU time it took Overcode to run.
-        master_script_time (float): The CPU + I/O time it took the master script to run.
+        None
     """
-
-    master_script_start = time.time()
 
     problems_dir = "problems_data"
     problem_dir = os.path.join(problems_dir, f"problem_{problem_id}")
@@ -62,6 +32,8 @@ def run_master_script(problem_id, interface=True):
     interface_dir = "ui"
 
     if not os.path.exists(output_dir):
+        master_script_start = time.time()
+
         if not os.path.exists(data_dir):
             get_problem_data(problem_id, problem_dir)
 
@@ -71,20 +43,23 @@ def run_master_script(problem_id, interface=True):
         run_pipeline(problem_dir, funcname)
         overcode_end = time.process_time()
 
+        master_script_end = time.time()
+
+        overcode_time = overcode_end - overcode_start
+        master_script_time = master_script_end - master_script_start
+
+        with open(os.path.join(output_dir, "execution_times.json"), "w") as f:
+            json.dump({"overcode_time": overcode_time, "master_script_time": master_script_time}, f)
+
+        print(f"Overcode took {overcode_time} seconds to run. (only CPU time)")
+        print(f"Master Script took {master_script_time} seconds to run. (CPU + I/O time)")
+
     if interface:
         replace_output_data(problem_id, output_dir, os.path.join(interface_dir, "output"))
         run_interface(interface_dir)
-
-    master_script_end = time.time()
-
-    overcode_time = overcode_end - overcode_start
-    master_script_time = master_script_end - master_script_start
     
-    print(f"Master script finished running for problem {problem_id}.")
-    print(f"Overcode took {overcode_time} seconds to run. (only CPU time)")
-    print(f"Master Script took {master_script_time} seconds to run. (CPU + I/O time)")
+    print(f"Master Script finished running for problem {problem_id}.")
 
-    return overcode_time, master_script_time
     
 
 if __name__ == "__main__":
