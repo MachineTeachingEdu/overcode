@@ -55,7 +55,7 @@ from . import pg_encoder
 
 # upper-bound on the number of executed lines, in order to guard against
 # infinite loops
-MAX_EXECUTED_LINES = 500
+MAX_EXECUTED_LINES = 1000
 
 DEBUG = False
 # DEBUG = True
