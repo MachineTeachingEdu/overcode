@@ -72,7 +72,7 @@ def tidy_json(source_dir, json_name, tested_function_name):
             continue #if its not fixed, dont modify it
         for key in list(sol.keys()):
             if key.startswith('py_') or key=='before' or key=='SynthesizedAfter':
-                print("Tidying ",id,key)
+                # print("Tidying ",id,key)
                 #print sol[key]
         
                 with open(before_path,'w') as before_file:
@@ -121,7 +121,7 @@ def tidy(source_dir, dest_dir, tested_function_name):
             continue
 
         sol_id = filename.split('.')[0]
-        print("Tidying", sol_id)
+        # print("Tidying", sol_id)
 
         source_path = path.join(source_dir, filename)
         dest_path = path.join(dest_dir, filename)

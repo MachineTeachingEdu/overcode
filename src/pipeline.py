@@ -861,7 +861,7 @@ def stack_solutions(all_solutions, all_stacks):
     mutates all_stacks
     """
     for sol in all_solutions:
-        print("Stacking", sol.solnum)
+        # print("Stacking", sol.solnum)
         for stack in all_stacks:
             if stack.should_contain(sol):
                 stack.add_solution(sol)
