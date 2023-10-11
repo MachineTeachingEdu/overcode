@@ -57,10 +57,9 @@ def get_testcase(problem_id, dst_dir=""):
         print("Error! No test cases found!")
     elif function_name is None:
         print("Error! No function name found!")
-    elif len(function_name) > 1:
-        print("Error! More than one function name found!")
     else:
-        create_testcase(testcases, function_name[0][0], dst_dir)
+        # The function name is always the last element in the list returned by the query
+        create_testcase(testcases, function_name[-1][0], dst_dir)
 
 
 if __name__ == "__main__":

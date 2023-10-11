@@ -35,12 +35,12 @@ def get_answer(problem_id, dst_dir=""):
     # verify data
     if answer is None:
         print("Error! No answer found!")
-    elif len(answer) > 1:
-        print("Error! More than one answer found!")
     else:
         filepath = os.path.join(dst_dir, "answer.py")
+        # The answer code is always the last element in the list returned by the query
+        code = answer[-1][0]
         with open(filepath, "w") as f:
-            f.write(answer[0][0])
+            f.write(code)
             print(f"Answer saved to '{filepath}'")
 
 if __name__ == "__main__":
