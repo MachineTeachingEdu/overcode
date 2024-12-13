@@ -12,7 +12,7 @@ functools32==3.2.3.post2
 gensim==0.12.4
 gnureadline==6.3.3
 httpretty==0.8.10
-ipython==4.2.0
+ipython==8.10.0
 ipython-genutils==0.1.0
 Jinja2==2.8
 jsonschema==2.5.1
